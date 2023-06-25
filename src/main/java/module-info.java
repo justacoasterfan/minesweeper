@@ -1,4 +1,5 @@
 module com.triagetrio.minesweeper {
+    requires transitive javafx.graphics;
     requires javafx.controls;
     requires javafx.fxml;
 
