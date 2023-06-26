@@ -6,15 +6,22 @@
     "configurations": [
         {
             "type": "java",
+            "name": "App",
+            "request": "launch",
+            "mainClass": "com.triagetrio.minesweeper/com.triagetrio.minesweeper.App",
+            "projectName": "minesweeper"
+        },
+        {
+            "type": "java",
             "name": "Current File",
             "request": "launch",
             "mainClass": "${file}"
         },
         {
             "type": "java",
-            "name": "App",
+            "name": "Main",
             "request": "launch",
-            "mainClass": "com.triagetrio.minesweeper/com.triagetrio.minesweeper.App",
+            "mainClass": "com.triagetrio.minesweeper/com.triagetrio.minesweeper.Main",
             "projectName": "minesweeper"
         }
     ]

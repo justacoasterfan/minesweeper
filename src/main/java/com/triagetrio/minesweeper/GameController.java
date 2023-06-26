@@ -7,25 +7,15 @@ import java.util.Random;
 //This is where all game logic happens
 public class GameController {
 
-    //Called at end of App.start()
-    public static void startGame() {
-        resetGame();
-    }
-
     public static void resetGame() {
         leftClickCount = 0;
-        int x = 0;
-        int y = 0;
-        while(x > 9) {
-            while (y > 9) {
+        for(int x = 0; x < 9; x++) {
+            for(int y = 0; y < 9; y++) {
 
                 Map.removeBomb(x, y);
                 Map.setUnrevealed(x, y);
                 Map.removeFlag(x, y);
-
-                y++;
             }
-            x++;
         }
     }
     
@@ -49,12 +39,6 @@ public class GameController {
             else {
                 PrimaryGUIController.setFieldImage(x, y, "bomb_exploded");
                 showEndScreen(false);
-                try {
-                    App.setRoot("/secondary.fxml");
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                
             }
         }
     }
@@ -97,8 +81,14 @@ public class GameController {
     public static void showEndScreen (boolean hasWon){
         if (hasWon == true)
             System.out.println ("Your win are belong to you");
-        else
+        else {
             System.out.println ("*boom* You have perished");
+            try {
+                    App.setRoot("/secondary.fxml");
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+        } 
     }
 
 
