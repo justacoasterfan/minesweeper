@@ -7,7 +7,7 @@
         "label": "Run via Maven",
         "type": "shell",
         "windows": {
-          "command": "..\\run.cmd"
+          "command": ".\\.scripts\\run.cmd"
         },
         "problemMatcher": []
       }
