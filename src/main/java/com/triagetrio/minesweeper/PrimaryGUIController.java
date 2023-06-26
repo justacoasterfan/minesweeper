@@ -53,8 +53,8 @@ public class PrimaryGUIController {
                 FileInputStream input = new FileInputStream("src\\main\\resources\\assets\\unrevealed.png");
                 Image image = new Image(input);
                 ImageView imageView = new ImageView(image);
-                imageView.setFitWidth(60);
-                imageView.setFitHeight(60);
+                imageView.setFitWidth(64);
+                imageView.setFitHeight(64);
                 imageView.setUserData(column + "|" + row);
                 imageView.setOnMouseClicked(event -> {
                     try {
@@ -75,9 +75,9 @@ public class PrimaryGUIController {
 
     /**
      * Change Image of given field to image given as name String
-     * @param x
-     * @param y
-     * @param imageName
+     * @param x X-Coordinate of Field
+     * @param y Y-Coordinate of Field
+     * @param imageName Name of the image (bomb, bomb_exploded, unrevealed, revealed_empty, flag, 1-8)
      */
     public static void setFieldImage(byte x, byte y, String imageName) {
         try{
