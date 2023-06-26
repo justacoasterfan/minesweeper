@@ -12,9 +12,9 @@
         },
         {
             "type": "java",
-            "name": "App",
+            "name": "Main",
             "request": "launch",
-            "mainClass": "com.triagetrio.minesweeper/com.triagetrio.minesweeper.App",
+            "mainClass": "com.triagetrio.minesweeper/com.triagetrio.minesweeper.Main",
             "projectName": "minesweeper"
         }
     ]

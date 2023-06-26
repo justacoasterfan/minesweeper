@@ -1,8 +1,8 @@
 package com.triagetrio.minesweeper;
 
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 
 
 import javafx.fxml.FXML;
@@ -48,9 +48,12 @@ public class PrimaryGUIController {
     //Fill gameGrid with imageViews and assign unrevealed.png as well as onMouseClick() lambda, keep refernces to all Nodes in gridPaneArray
     @FXML
     public void initialize() throws FileNotFoundException {
+
+        //iterate through gridPane and configure imageViews
         for (int column = 0; column < 9; column++) {
             for (int row = 0; row < 9; row++) {
-                FileInputStream input = new FileInputStream("src\\main\\resources\\assets\\unrevealed.png");
+                ClassLoader classLoader = (new App()).getClass().getClassLoader();
+                InputStream input = classLoader.getResourceAsStream("assets/unrevealed.png");
                 Image image = new Image(input);
                 ImageView imageView = new ImageView(image);
                 imageView.setFitWidth(64);
@@ -71,6 +74,7 @@ public class PrimaryGUIController {
                     gridPaneArray[GridPane.getColumnIndex(node)][GridPane.getRowIndex(node)] = node;
             }
         }
+        GameController.resetGame();
     }
 
     /**
@@ -80,12 +84,9 @@ public class PrimaryGUIController {
      * @param imageName Name of the image (bomb, bomb_exploded, unrevealed, revealed_empty, flag, 1-8)
      */
     public static void setFieldImage(byte x, byte y, String imageName) {
-        try{
-            FileInputStream input = new FileInputStream("src\\main\\resources\\assets\\" + imageName + ".png");
-            Image image = new Image(input);
-            ((ImageView)gridPaneArray[x][y]).setImage(image);   
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
+        ClassLoader classLoader = (new App()).getClass().getClassLoader();
+        InputStream input = classLoader.getResourceAsStream("assets/" + imageName + ".png");
+        Image image = new Image(input);
+        ((ImageView)gridPaneArray[x][y]).setImage(image);
     }
 }
