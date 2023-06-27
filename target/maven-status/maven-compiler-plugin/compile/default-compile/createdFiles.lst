@@ -1,6 +1,4 @@
 com\triagetrio\minesweeper\GameController.class
-com\triagetrio\minesweeper\PrimaryGUIController.class
-com\triagetrio\minesweeper\SecondaryGUIController.class
 module-info.class
 com\triagetrio\minesweeper\Main.class
 com\triagetrio\minesweeper\App.class

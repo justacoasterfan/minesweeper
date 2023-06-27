@@ -9,12 +9,14 @@ public class GameController {
 
     public static void resetGame() {
         leftClickCount = 0;
+        discoveredBombs = 0;
         for(int x = 0; x < 9; x++) {
             for(int y = 0; y < 9; y++) {
 
                 Map.removeBomb(x, y);
                 Map.setUnrevealed(x, y);
                 Map.removeFlag(x, y);
+                Map.setUnblocked(x, y);
             }
         }
     }
@@ -22,39 +24,62 @@ public class GameController {
     private static int leftClickCount = 0;
     //called whenever field is left clicked with information on position
     public static void leftClickHandler(byte x, byte y) {
-        leftClickCount++;
-        if (leftClickCount == 1) 
-            populate();
         
         if (!Map.isRevealed(x, y) && !Map.hasFlag(x, y)) {
             if(!Map.hasBomb(x, y)) {
-                //PrimaryGUIController.setFieldImage(x, y, "revealed_empty");
                 byte surroundingBombs = proximityBombNumber(x, y);
                 if (surroundingBombs == 0)
-                    PrimaryGUIController.setFieldImage(x, y, "revealed_empty");
+                    GameGUIController.setFieldImage(x, y, "revealed_empty");
                 else
-                    PrimaryGUIController.setFieldImage(x, y, Byte.toString( surroundingBombs ));
+                    GameGUIController.setFieldImage(x, y, Byte.toString( surroundingBombs ));
                 Map.setRevealed(x,y);
             }
             else {
-                PrimaryGUIController.setFieldImage(x, y, "bomb_exploded");
+                GameGUIController.setFieldImage(x, y, "bomb_exploded");
                 showEndScreen(false);
             }
         }
+
+        //clicked, increment click counter by one
+        leftClickCount++;
+        
+        //check if first move to place bombs and block starting fields
+        if (leftClickCount == 1) {
+
+            for (byte i = 0; i < 8; i++) {
+            // If current adjacent field is valid block it
+                if ( isValidField((byte) (x + Map.xOffset[i]), (byte) (y + Map.yOffset[i]) ))
+                    Map.setBlocked(x + Map.xOffset[i], y + Map.yOffset[i]);
+            }
+            //place the bombs around starting field
+            populate();
+        }
+            
     }
 
+    private static byte discoveredBombs;
     //called whenever field is right or middle clicked with information on position
     public static void rightClickHandler(byte x, byte y) {
         if(!Map.isRevealed(x, y)) {
             if(!Map.hasFlag(x, y)) {
                 Map.placeFlag(x, y);
-                PrimaryGUIController.setFieldImage(x, y, "flag");
+                //check if flag is placed on bomb field and add one discovered bomb if true
+                if(Map.hasBomb(x, y))
+                    discoveredBombs++;
+                GameGUIController.setFieldImage(x, y, "flag");
             }
             else {
                 Map.removeFlag(x, y);
-                PrimaryGUIController.setFieldImage(x, y, "unrevealed");
+
+                //check if flag was on bomb field and remove one discovered bomb if true
+                if(Map.hasBomb(x, y))
+                    discoveredBombs--;
+
+                GameGUIController.setFieldImage(x, y, "unrevealed");
             }
-                
+        }
+        if(discoveredBombs == Options.bombCount) {
+            showEndScreen(true);
         }
     }
 
@@ -64,11 +89,11 @@ public class GameController {
         Random random = new Random();
 
         int repeat = 0;
-        while (repeat < 10 )   {    
+        while (repeat < Options.bombCount )   {    
             repeat ++;
             int x =  random.nextInt(9);
             int y = random.nextInt(9);
-            if (Map.hasBomb(x, y))
+            if (Map.hasBomb(x, y) || Map.isBlocked(x, y))
                 repeat --;
             else
                 Map.placeBomb(x, y);
@@ -79,12 +104,20 @@ public class GameController {
     }  
 
     public static void showEndScreen (boolean hasWon){
-        if (hasWon == true)
+
+        //TODO: AT END REVEAL FIELD FIRST
+        if (hasWon == true) {
             System.out.println ("Your win are belong to you");
+            try {
+                    App.setRoot("/won.fxml");
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+        }
         else {
             System.out.println ("*boom* You have perished");
             try {
-                    App.setRoot("/secondary.fxml");
+                    App.setRoot("/lost.fxml");
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -103,13 +136,9 @@ public class GameController {
 
         byte numberBombs = 0;
 
-        //Direction arrays (contain coordinate offsets to check)
-        final byte xOffset[] = { -1, 1, -1, 0, 1, -1, 0, 1 };
-        final byte yOffset[] = { 0, 0, -1, -1, -1, 1, 1, 1 };
-
         for (byte i = 0; i < 8; i++) {
           // If current adjacent cell is valid
-          if ( isValidField((byte) (x + xOffset[i]), (byte) (y + yOffset[i]) ) && (Map.hasBomb(x + xOffset[i], y + yOffset[i])) )
+          if ( isValidField((byte) (x + Map.xOffset[i]), (byte) (y + Map.yOffset[i]) ) && (Map.hasBomb(x + Map.xOffset[i], y + Map.yOffset[i])) )
             numberBombs ++;
         }
         return numberBombs;
