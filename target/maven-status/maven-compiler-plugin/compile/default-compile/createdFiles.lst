@@ -1,9 +1,9 @@
-com\triagetrio\minesweeper\GameController.class
-module-info.class
 com\triagetrio\minesweeper\GameGUIController.class
 com\triagetrio\minesweeper\Main.class
-com\triagetrio\minesweeper\WonGUIController.class
-com\triagetrio\minesweeper\Options.class
 com\triagetrio\minesweeper\App.class
 com\triagetrio\minesweeper\Map.class
+com\triagetrio\minesweeper\GameController.class
+module-info.class
+com\triagetrio\minesweeper\WonGUIController.class
+com\triagetrio\minesweeper\Options.class
 com\triagetrio\minesweeper\LostGUIController.class

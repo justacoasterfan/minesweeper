@@ -2,6 +2,7 @@ package com.triagetrio.minesweeper;
 
 import java.io.IOException;
 import java.util.Random;
+import java.util.concurrent.TimeUnit;
 
 
 //This is where all game logic happens
@@ -10,13 +11,15 @@ public class GameController {
     public static void resetGame() {
         leftClickCount = 0;
         discoveredBombs = 0;
-        for(int x = 0; x < 9; x++) {
-            for(int y = 0; y < 9; y++) {
+        for(byte x = 0; x < 9; x++) {
+            for(byte y = 0; y < 9; y++) {
 
                 Map.removeBomb(x, y);
                 Map.setUnrevealed(x, y);
                 Map.removeFlag(x, y);
                 Map.setUnblocked(x, y);
+
+                GameGUIController.setFieldImage(x, y, Options.Textures.unrevealed);
             }
         }
     }
@@ -29,13 +32,13 @@ public class GameController {
             if(!Map.hasBomb(x, y)) {
                 byte surroundingBombs = proximityBombNumber(x, y);
                 if (surroundingBombs == 0)
-                    GameGUIController.setFieldImage(x, y, "revealed_empty");
+                    GameGUIController.setFieldImage(x, y, Options.Textures.revealed_empty);
                 else
-                    GameGUIController.setFieldImage(x, y, Byte.toString( surroundingBombs ));
+                    GameGUIController.setFieldImage(x, y, Options.Textures.texturePack + "/" + Byte.toString( surroundingBombs ));
                 Map.setRevealed(x,y);
             }
             else {
-                GameGUIController.setFieldImage(x, y, "bomb_exploded");
+                GameGUIController.setFieldImage(x, y, Options.Textures.bomb_exploded);
                 showEndScreen(false);
             }
         }
@@ -66,7 +69,7 @@ public class GameController {
                 //check if flag is placed on bomb field and add one discovered bomb if true
                 if(Map.hasBomb(x, y))
                     discoveredBombs++;
-                GameGUIController.setFieldImage(x, y, "flag");
+                GameGUIController.setFieldImage(x, y, Options.Textures.flag);
             }
             else {
                 Map.removeFlag(x, y);
@@ -75,9 +78,11 @@ public class GameController {
                 if(Map.hasBomb(x, y))
                     discoveredBombs--;
 
-                GameGUIController.setFieldImage(x, y, "unrevealed");
+                GameGUIController.setFieldImage(x, y, Options.Textures.unrevealed);
             }
         }
+
+        //check if all bombs were discovered
         if(discoveredBombs == Options.bombCount) {
             showEndScreen(true);
         }
@@ -103,10 +108,17 @@ public class GameController {
        aufgrund von nur 12% Bombenverteilung, daher zu vernachlässigen*/
     }  
 
-    public static void showEndScreen (boolean hasWon){
+    private static void showEndScreen (boolean hasWon){
 
-        //TODO: AT END REVEAL FIELD FIRST
-        if (hasWon == true) {
+        new Thread(() -> uncoverRemaining() ).start();
+
+        try {
+            TimeUnit.MILLISECONDS.sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        if (hasWon) {
             System.out.println ("Your win are belong to you");
             try {
                     App.setRoot("/won.fxml");
@@ -122,6 +134,26 @@ public class GameController {
                     e.printStackTrace();
                 }
         } 
+    }
+
+
+    private static void uncoverRemaining() {
+        for(byte x = 0; x < 9; x++) {
+            for(byte y = 0; y < 9; y++) {
+                if(!Map.isRevealed(x, y)) {
+                    Map.setRevealed(x, y);
+                        if(!Map.hasBomb(x, y)) {
+                            byte surroundingBombs = proximityBombNumber(x, y);
+                            if (surroundingBombs == 0)
+                                GameGUIController.setFieldImage(x, y, Options.Textures.revealed_empty);
+                            else
+                                GameGUIController.setFieldImage(x, y, Options.Textures.texturePack + "/" + Byte.toString( surroundingBombs ));
+                        }
+                        else 
+                            GameGUIController.setFieldImage(x, y, Options.Textures.bomb);
+                }
+            }
+        }
     }
 
 

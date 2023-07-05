@@ -6,11 +6,11 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox alignment="CENTER" spacing="20.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.triagetrio.minesweeper.WonGUIController">
+<VBox alignment="CENTER" style="-fx-background-color: #c1bebeff;" spacing="20.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.triagetrio.minesweeper.WonGUIController">
     <children>
-      <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fitWidth="576.0" pickOnBounds="true" preserveRatio="true">
          <image>
-            <Image url="@assets/game_won.png" />
+            <Image url="@assets/game_won_patrick.png" />
          </image>
       </ImageView>
         <Button fx:id="secondaryButton" onAction="#switchToPrimary" text="Play Again" />
