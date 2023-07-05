@@ -2,7 +2,6 @@ package com.triagetrio.minesweeper;
 
 import java.io.IOException;
 import java.util.Random;
-import java.util.concurrent.TimeUnit;
 
 
 //This is where all game logic happens
@@ -18,6 +17,7 @@ public class GameController {
                 Map.setUnrevealed(x, y);
                 Map.removeFlag(x, y);
                 Map.setUnblocked(x, y);
+                Map.setUnexploded(x, y);
 
                 GameGUIController.setFieldImage(x, y, Options.Textures.unrevealed);
             }
@@ -26,7 +26,7 @@ public class GameController {
     
     private static int leftClickCount = 0;
     //called whenever field is left clicked with information on position
-    public static void leftClickHandler(byte x, byte y) {
+    public static void leftClickHandler(byte x, byte y) throws IOException {
         
         if (!Map.isRevealed(x, y) && !Map.hasFlag(x, y)) {
             if(!Map.hasBomb(x, y)) {
@@ -35,10 +35,11 @@ public class GameController {
                     GameGUIController.setFieldImage(x, y, Options.Textures.revealed_empty);
                 else
                     GameGUIController.setFieldImage(x, y, Options.Textures.texturePack + "/" + Byte.toString( surroundingBombs ));
-                Map.setRevealed(x,y);
+                Map.setRevealed(x, y);
             }
             else {
                 GameGUIController.setFieldImage(x, y, Options.Textures.bomb_exploded);
+                Map.setExploded(x, y);
                 showEndScreen(false);
             }
         }
@@ -62,7 +63,7 @@ public class GameController {
 
     private static byte discoveredBombs;
     //called whenever field is right or middle clicked with information on position
-    public static void rightClickHandler(byte x, byte y) {
+    public static void rightClickHandler(byte x, byte y) throws IOException {
         if(!Map.isRevealed(x, y)) {
             if(!Map.hasFlag(x, y)) {
                 Map.placeFlag(x, y);
@@ -108,32 +109,30 @@ public class GameController {
        aufgrund von nur 12% Bombenverteilung, daher zu vernachlässigen*/
     }  
 
-    private static void showEndScreen (boolean hasWon){
+  
+    private static void showEndScreen(boolean hasWon) throws IOException{
 
-        new Thread(() -> uncoverRemaining() ).start();
-
-        try {
-            TimeUnit.MILLISECONDS.sleep(1000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+        uncoverRemaining();
 
         if (hasWon) {
-            System.out.println ("Your win are belong to you");
-            try {
-                    App.setRoot("/won.fxml");
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+            System.out.println("Your win are belong to you");
+            // try {
+            //         App.setRoot("/won.fxml");
+            //     } catch (IOException e) {
+            //         e.printStackTrace();
+            //     }
         }
         else {
-            System.out.println ("*boom* You have perished");
-            try {
-                    App.setRoot("/lost.fxml");
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+            System.out.println("*boom* You have perished");
+            // try {
+            //         App.setRoot("/lost.fxml");
+            //     } catch (IOException e) {
+            //         e.printStackTrace();
+            //     }
         } 
+
+        //needed to refresh
+        throw new IOException();
     }
 
 
@@ -141,7 +140,8 @@ public class GameController {
         for(byte x = 0; x < 9; x++) {
             for(byte y = 0; y < 9; y++) {
                 if(!Map.isRevealed(x, y)) {
-                    Map.setRevealed(x, y);
+                    if(!Map.hasFlag(x, y)) {
+                        Map.setRevealed(x, y);
                         if(!Map.hasBomb(x, y)) {
                             byte surroundingBombs = proximityBombNumber(x, y);
                             if (surroundingBombs == 0)
@@ -149,8 +149,9 @@ public class GameController {
                             else
                                 GameGUIController.setFieldImage(x, y, Options.Textures.texturePack + "/" + Byte.toString( surroundingBombs ));
                         }
-                        else 
+                        else if(!Map.isExploded(x, y))
                             GameGUIController.setFieldImage(x, y, Options.Textures.bomb);
+                    }
                 }
             }
         }
@@ -176,7 +177,7 @@ public class GameController {
         return numberBombs;
     }
 
-    //simple utility method for proximityBombBumber to check if a selected field even exists
+    //simple utility method for proximityBombBumber and field blocking to check if a selected field even exists
     private static boolean isValidField(byte x, byte y) {
         // Returns true if valid
         return (x >= 0 && y >= 0 && x < 9 && y < 9);

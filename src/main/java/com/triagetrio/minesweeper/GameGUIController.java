@@ -4,7 +4,6 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 
-
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.input.MouseButton;
@@ -20,7 +19,7 @@ import javafx.scene.image.ImageView;
 public class GameGUIController {
 
     @FXML
-    public GridPane gameGrid;
+    private GridPane gameGrid;
 
     private static Node[][] gridPaneArray = new Node[9][9];
 
@@ -105,18 +104,21 @@ public class GameGUIController {
     private void setTexturesMC() {
         Options.Textures.texturePack = "mc";
         Options.Textures.reload();
+        GameController.resetGame();
     }
 
     @FXML
     private void setTexturesClassic() {
         Options.Textures.texturePack = "classic";
         Options.Textures.reload();
+        GameController.resetGame();
     }
 
     @FXML
     private void setTexturesPatrick() {
         Options.Textures.texturePack = "patrick";
         Options.Textures.reload();
+        GameController.resetGame();
     }
 
 

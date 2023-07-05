@@ -1,5 +1,7 @@
 package com.triagetrio.minesweeper;
 
+
+// contains all game options
 public class Options {
     
     public static final byte bombCount = 10;

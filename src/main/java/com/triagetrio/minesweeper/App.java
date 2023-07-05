@@ -4,9 +4,11 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.io.InputStream;
 
 
 /**
@@ -19,11 +21,17 @@ public class App extends Application {
 
     @Override
     public void start(Stage stage) throws IOException {
-        scene = new Scene(loadFXML("/game.fxml"), 576, 656);
+        scene = new Scene(loadFXML("/game.fxml"), 576, 626);
         stage.setScene(scene);
         stage.show();
         stage.setResizable(false);
         stage.setTitle("Minesweeper");
+
+        //load icon from assets folder
+        ClassLoader classLoader = (new App()).getClass().getClassLoader();
+        InputStream input = classLoader.getResourceAsStream("assets/classic/flag.png");
+        Image image = new Image(input);
+        stage.getIcons().add(image);
     }
 
     static void setRoot(String fxml) throws IOException {
