@@ -19,9 +19,12 @@ public class App extends Application {
 
     private static Scene scene;
 
+    public static Stage primaryStage;
+
     @Override
     public void start(Stage stage) throws IOException {
-        scene = new Scene(loadFXML("/game.fxml"), 576, 626);
+        scene = new Scene(loadFXML("/game.fxml"), Options.windowWidth, Options.windowHeight);
+        primaryStage = stage;
         stage.setScene(scene);
         stage.show();
         stage.setResizable(false);

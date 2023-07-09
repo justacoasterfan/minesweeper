@@ -1,6 +1,5 @@
 package com.triagetrio.minesweeper;
 
-import java.io.IOException;
 import java.util.Random;
 
 
@@ -10,6 +9,7 @@ public class GameController {
     public static void resetGame() {
         leftClickCount = 0;
         discoveredBombs = 0;
+        GameGUIController.setSmileyState(Options.Textures.smiley_regular);
         for(byte x = 0; x < 9; x++) {
             for(byte y = 0; y < 9; y++) {
 
@@ -26,7 +26,7 @@ public class GameController {
     
     private static int leftClickCount = 0;
     //called whenever field is left clicked with information on position
-    public static void leftClickHandler(byte x, byte y) throws IOException {
+    public static void leftClickHandler(byte x, byte y) {
         
         if (!Map.isRevealed(x, y) && !Map.hasFlag(x, y)) {
             if(!Map.hasBomb(x, y)) {
@@ -63,7 +63,7 @@ public class GameController {
 
     private static byte discoveredBombs;
     //called whenever field is right or middle clicked with information on position
-    public static void rightClickHandler(byte x, byte y) throws IOException {
+    public static void rightClickHandler(byte x, byte y) {
         if(!Map.isRevealed(x, y)) {
             if(!Map.hasFlag(x, y)) {
                 Map.placeFlag(x, y);
@@ -89,6 +89,11 @@ public class GameController {
         }
     }
 
+    // called whenever smiley is clicked
+    public static void smileyClickHandler() {
+        resetGame();
+    }
+
 
     //Randomly place 10 bombs on map
     private static void populate() { 
@@ -110,12 +115,14 @@ public class GameController {
     }  
 
   
-    private static void showEndScreen(boolean hasWon) throws IOException{
+    private static void showEndScreen(boolean hasWon) {
 
         uncoverRemaining();
+        GameOverDialogGUIController.showGameOver(App.primaryStage, hasWon);
 
         if (hasWon) {
             System.out.println("Your win are belong to you");
+            GameGUIController.setSmileyState(Options.Textures.smiley_won);
             // try {
             //         App.setRoot("/won.fxml");
             //     } catch (IOException e) {
@@ -124,15 +131,13 @@ public class GameController {
         }
         else {
             System.out.println("*boom* You have perished");
+            GameGUIController.setSmileyState(Options.Textures.smiley_lost);
             // try {
             //         App.setRoot("/lost.fxml");
             //     } catch (IOException e) {
             //         e.printStackTrace();
             //     }
         } 
-
-        //needed to refresh
-        throw new IOException();
     }
 
 
@@ -152,10 +157,14 @@ public class GameController {
                         else if(!Map.isExploded(x, y))
                             GameGUIController.setFieldImage(x, y, Options.Textures.bomb);
                     }
+                    else if(!Map.hasBomb(x, y))
+                        GameGUIController.setFieldImage(x, y, Options.Textures.flag_wrong);
                 }
             }
         }
     }
+
+    
 
 
     /**

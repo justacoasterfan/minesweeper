@@ -9,7 +9,7 @@
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.RowConstraints?>
 
-<AnchorPane prefHeight="576.0" prefWidth="576.0" style="-fx-background-color: #c1bebeff;" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.triagetrio.minesweeper.GameGUIController">
+<AnchorPane fx:id="anchorPane" prefHeight="576.0" prefWidth="576.0" style="-fx-background-color: #c1bebeff;" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.triagetrio.minesweeper.GameGUIController">
    <children>
       <GridPane id="gridPane" fx:id="gameGrid" alignment="BOTTOM_CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="0.0" minWidth="0.0" prefHeight="576.0" prefWidth="576.0" AnchorPane.topAnchor="0.0">
         <columnConstraints>
@@ -49,10 +49,23 @@
                   </MenuButton>
                </content>
             </CustomMenuItem>
+            <CustomMenuItem hideOnClick="false" mnemonicParsing="false" text="Unspecified Action">
+               <content>
+                  <MenuButton mnemonicParsing="false" popupSide="RIGHT" text="Bomb Number">
+                     <items>
+                        <MenuItem mnemonicParsing="false" onAction="#setBombNumber5" text="5" />
+                        <MenuItem mnemonicParsing="false" onAction="#setBombNumber10" text="10 (default)" />
+                        <MenuItem mnemonicParsing="false" onAction="#setBombNumber15" text="15" />
+                        <MenuItem mnemonicParsing="false" onAction="#setBombNumber20" text="20" />
+                        <MenuItem mnemonicParsing="false" onAction="#setBombNumber25" text="25" />
+                     </items>
+                  </MenuButton>
+               </content>
+            </CustomMenuItem>
         </items>
       </MenuButton>
    </children>
    <padding>
-      <Insets top="50.0" />
+      <Insets top="100.0" />
    </padding>
 </AnchorPane>
