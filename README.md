@@ -1,4 +1,4 @@
-# ![flag](https://github.com/justacoasterfan/minesweeper/assets/45495307/fdab7953-f87f-4a35-9ddd-bea73b1bc2f6)Minesweeper Java
+# ![flag](https://github.com/justacoasterfan/minesweeper/assets/45495307/fdab7953-f87f-4a35-9ddd-bea73b1bc2f6)Minesweeper Java![flag](https://github.com/justacoasterfan/minesweeper/assets/45495307/fdab7953-f87f-4a35-9ddd-bea73b1bc2f6)
 Built using JavaFX with a Maven project. The project should be importable into all major IDEs including IntelliJ, Eclipse and VSCode. 
 **Please note that this game requires Java/JDK 17 to run! You can find releases [here](https://adoptium.net/de/temurin/releases/).**
 
