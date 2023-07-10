@@ -1,3 +1,9 @@
+# Minesweeper Java
+Built using JavaFX with a Maven project. The project should be importable into all major IDEs including IntelliJ, Eclipse and VSCode. 
+**Please nothe that this game requires Java/JDK 17 to run! You can find releases [here](https://adoptium.net/de/temurin/releases/).**
+
+
+## Initial planning:
 **MVP**
 - Map
 - Random bomb placement (populate)
